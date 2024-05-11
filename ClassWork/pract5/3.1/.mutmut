@@ -1,0 +1,6 @@
+[mutmut]
+target = binary_search.py
+tests = test_binary_search.py
+coverage = True
+coverage_threshold = 100
+mutators = const

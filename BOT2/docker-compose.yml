@@ -1,0 +1,43 @@
+version: '3.9'
+
+volumes:
+  files:
+  pg_data:
+  redis_data:
+
+
+services:
+  bot:
+    build: .
+    restart: always
+    command: bash -c "alembic upgrade head && python bot.py"
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    volumes:
+      - files:/files
+    depends_on:
+      - postgres
+      - redis
+    container_name: travel_bot
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    container_name: postgres_bot
+
+  redis:
+    image: redis:alpine
+    restart: always
+    command:
+      - redis-server
+    env_file:
+      - .env
+    volumes:
+      - redis_data:/data
+    container_name: redis_bot
